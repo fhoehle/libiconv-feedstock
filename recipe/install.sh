@@ -18,5 +18,6 @@ if [[ "${PKG_NAME}" == "libiconv" ]]; then
   # remove iconv executable   
   rm $PREFIX/bin/iconv
 else
-  echo "relying on conda build to depuplicate files."
+	# relying on conda-build to deduplicate files
+  echo "Keeping all files, conda-build will deduplicate files"
 fi

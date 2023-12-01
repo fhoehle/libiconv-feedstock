@@ -31,7 +31,7 @@ requirements:
 
 outputs:
   - name: libiconv
-    script: install.sh  # [not win]
+    script: install.sh   # [not win]
     script: install.bat  # [win]
     requirements:
       build:
@@ -61,7 +61,7 @@ outputs:
     script: install.sh
     # there is no executable available on windows see
     # https://github.com/conda-forge/libiconv-feedstock/pull/7#issuecomment-224392000
-    skip: true # [win]
+    skip: true  # [win]
     requirements:
       build:
         - libtool
