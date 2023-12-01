@@ -35,6 +35,8 @@ outputs:
     script: install.bat  # [win]
     requirements:
       build:
+        - libtool  # [unix]
+        - {{ compiler('c') }}
         - cmake     # [win]
         - ninja     # [win]
         - m2-patch  # [win]
@@ -53,6 +55,8 @@ outputs:
     script: install.bat  # [win]
     requirements:
       build:
+        - libtool  # [unix]
+        - {{ compiler('c') }}
         - cmake     # [win]
         - ninja     # [win]
         - m2-patch  # [win]
