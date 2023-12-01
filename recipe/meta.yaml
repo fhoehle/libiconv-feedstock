@@ -1,7 +1,7 @@
 {% set version = "1.17" %}
 
 package:
-  name: libiconv
+  name: libiconv-split
   version: {{ version }}
 
 source:
@@ -14,7 +14,7 @@ source:
     - configure.cmake.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   run_exports:
     # Pretty good recently, let's trust them.
     #   https://abi-laboratory.pro/tracker/timeline/libiconv/
@@ -29,9 +29,40 @@ requirements:
     - m2-patch  # [win]
     - make      # [unix]
 
-test:
-  commands:
-    - iconv --help  # [not win]
+outputs:
+  - name: libiconv
+    script: install.sh  # [not win]
+    script: install.bat  # [win]
+    requirements:
+      build:
+        - cmake     # [win]
+        - ninja     # [win]
+        - m2-patch  # [win]
+        - make      # [unix]
+    test:
+      commands:
+        - test ! -f ${PREFIX}/bin/iconv # [not win]
+        - test -f $CONDA_PREFIX/lib/libiconv.so # [not win]
+        - test -f $CONDA_PREFIX/lib/libcharset.so # [not win]
+        - if exist %LIBRARY_PREFIX%\bin\iconv.exe exit 1  # [win]
+        - if not exist %LIBRARY_PREFIX%\lib\libiconv.lib exit 1  # [win]
+        - if not exist %LIBRARY_PREFIX%\lib\libcharset.lib exit 1  # [win]
+
+  - name: iconv
+    script: install.sh  # [unix]
+    script: install.bat  # [win]
+    requirements:
+      build:
+        - cmake     # [win]
+        - ninja     # [win]
+        - m2-patch  # [win]
+        - make      # [unix]
+      run:
+        - {{ pin_subpackage('libiconv', exact=True) }}
+    test:
+      commands:
+        - iconv --help  # [not win]
+        - iconv.exe --help  # [win]
 
 about:
   home: https://www.gnu.org/software/libiconv/
